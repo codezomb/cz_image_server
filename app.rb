@@ -1,7 +1,5 @@
-require 'bundler/setup'
 require 'sinatra/base'
 require 'mini_magick'
-require 'yaml'
 
 class ImageServer < Sinatra::Base
 
@@ -29,5 +27,3 @@ class ImageServer < Sinatra::Base
     end
 
 end
-
-ImageServer.run!

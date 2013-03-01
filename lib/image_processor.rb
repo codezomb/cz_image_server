@@ -75,7 +75,7 @@ class ImageProcessor
         c.extent  dimensions if @options[:crop]
       end
     end
-    @image.format("jpg2000")
+    @image.format("jpg")
     self
   end
 

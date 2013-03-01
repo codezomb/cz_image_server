@@ -11,7 +11,7 @@ class ImageProcessor
   def initialize(image, options={})
     @image   = MiniMagick::Image.open(image)
     @options = options
-    @path    = "./tmp/"
+    @path    = Dir.pwd
   end
 
   #

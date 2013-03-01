@@ -13,9 +13,9 @@ class ImageServer < Sinatra::Base
 
   #
   # Example
-  # /IMG_3821.JPG?resize=300x300&rotate=90&crop=true&quality=80
+  # /i/IMG_3821.JPG?resize=300x300&rotate=90&crop=true&quality=80
   #
-  get "/:path" do |path|
+  get "/i/:path" do |path|
     image = ImageProcessor.new(parsed_url(path), parsed_options)
     send_file(image.process.store.path, :type => image.type, :disposition => "inline")
   end

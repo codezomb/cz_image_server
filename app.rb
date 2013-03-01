@@ -3,8 +3,14 @@ require 'mini_magick'
 
 class ImageServer < Sinatra::Base
 
+  get '/' do
+    "CodeZombie Labs - Image Server"
+  end
+
   get '/:operation/:dimensions/*' do |operation, dimensions, url|
-    url = sanitize_url(url)
+    return "Missing URL" if url.empty?
+
+    url = URI.parse(url)
     image = MiniMagick::Image.open("#{url.scheme}:/#{url.path}")
     image.combine_options do |i|
       i.filter    'box'
@@ -16,14 +22,5 @@ class ImageServer < Sinatra::Base
     image.format("jpg")
     send_file(image.path, :type => "image/jpeg", :disposition => "inline")
   end
-
-  protected
-
-    #
-    # encode spaces and brackets
-    #
-    def sanitize_url(url)
-      URI.parse(url)
-    end
 
 end

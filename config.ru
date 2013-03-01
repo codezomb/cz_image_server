@@ -7,4 +7,4 @@ ENV['RACK_ENV'] ||= "development"
 $stdout.sync = true
 
 require './app'
-ImageServer.run!
+run ImageServer

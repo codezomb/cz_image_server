@@ -6,5 +6,5 @@ Bundler.require
 ENV['RACK_ENV'] ||= "development"
 $stdout.sync = true
 
-require './app'
+require './image_server'
 run ImageServer

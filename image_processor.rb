@@ -8,8 +8,8 @@ class ImageProcessor
   #
   # Standard Initializer
   #
-  def initialize(image, options={})
-    @image   = MiniMagick::Image.open(image)
+  def initialize(path, options={})
+    @image   = MiniMagick::Image.open(path)
     @options = options
     @path    = "#{Dir.pwd}/"
     @type    = @image.mime_type

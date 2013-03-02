@@ -1,4 +1,5 @@
 require './image_processor'
+require 'benchmark'
 
 class ImageServer < Sinatra::Base
 

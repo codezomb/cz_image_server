@@ -1,6 +1,5 @@
 require 'mini_magick'
 require 'securerandom'
-require 'benchmark'
 
 class ImageProcessor
 
@@ -20,19 +19,17 @@ class ImageProcessor
   # Do the processing, and return the image
   #
   def process
-    puts Benchmark.measure {
-      if @options.any?
-        @image.combine_options do |c|
-          # c.strip
-          c.filter  'box'
-          c.gravity 'center'
-          c.quality quality     if @options[:quality]
-          c.resize  extent      if @options[:resize]
-          c.rotate  rotate      if @options[:rotate]
-          c.extent  dimensions  if @options[:crop]
-        end
+    if @options.any?
+      @image.combine_options do |c|
+        c.strip
+        c.filter  'box'
+        c.gravity 'center'
+        c.quality quality     if @options[:quality]
+        c.resize  extent      if @options[:resize]
+        c.rotate  rotate      if @options[:rotate]
+        c.extent  dimensions  if @options[:crop]
       end
-    }
+    end
     self
   end
 

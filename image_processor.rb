@@ -11,7 +11,7 @@ class ImageProcessor
   def initialize(path, options={})
     @image   = MiniMagick::Image.open(path)
     @options = options
-    @path    = "#{Dir.pwd}/"
+    @path    = "#{Dir.pwd}/tmp/"
     @type    = @image.mime_type
   end
 
@@ -37,6 +37,7 @@ class ImageProcessor
   # Create a new tempfile
   #
   def store
+    Dir.mkdir(@path) unless Dir.exists?(@path)
     begin
       filename = "#{SecureRandom.hex}.jpg"
     end while File.exists?("#{@path}#{filename}")

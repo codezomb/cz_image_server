@@ -7,6 +7,9 @@ class ImageServer < Sinatra::Base
     set :allowed_actions, [:resize, :rotate, :quality, :crop]
   end
 
+  #
+  # Redirect to codezombie.org
+  #
   get "/" do
     redirect "http://codezombie.org"
   end

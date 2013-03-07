@@ -14,7 +14,7 @@ class ImageServer < Sinatra::Base
   # Crop    - Boolean, set to true when to crop the image, instead of scale (default: false )
   #
   configure do
-    set :allowed_domain,  'https://aperture-store.s3.amazonaws.com'
+    set :allowed_domain,  ''
     set :allowed_actions, [:gravity, :quality, :resize, :rotate, :strip, :crop]
   end
 

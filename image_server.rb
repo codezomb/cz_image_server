@@ -1,11 +1,21 @@
 require './image_processor'
-require 'benchmark'
 
 class ImageServer < Sinatra::Base
 
+  #
+  # Image Options
+  # Allowed domain defines what domain we're allowed to pull images from
+  # Allowed actions defines what options we pass to the processor
+  #
+  # Gravity - Set the point from which the image should crop                (default: center)
+  # Quality - Set the returned image Quality                                (default: 100   )
+  # Resize  - Resolution for the returned image                             (default: none  )
+  # Strip   - Strip all meta data from the returned image                   (default: false )
+  # Crop    - Boolean, set to true when to crop the image, instead of scale (default: false )
+  #
   configure do
     set :allowed_domain,  'https://aperture-store.s3.amazonaws.com'
-    set :allowed_actions, [:resize, :rotate, :quality, :crop]
+    set :allowed_actions, [:gravity, :quality, :resize, :rotate, :strip, :crop]
   end
 
   #
@@ -18,12 +28,16 @@ class ImageServer < Sinatra::Base
   #
   # Example
   # /i/IMG_3821.JPG?resize=300x300&rotate=90&crop=true&quality=80
+  # Throws an ImageProcessor::ImageNotFound, if the image doesn't exist
+  # TODO: Add more exceptions for various possible errors.
   #
   get "/i/:path" do |path|
-    puts Benchmark.measure {
-      @image = ImageProcessor.new(parsed_url(path), parsed_options)
-    }
-    send_file(@image.process.store.path, :type => @image.type, :disposition => "inline")
+    begin
+      @image = ImageProcessor.new(parsed_url(path), parsed_options).process.store
+      send_file(@image.path, :type => @image.type, :disposition => "inline")
+    rescue ImageProcessor::ImageNotFound
+      not_found { "That image could not be located." }
+    end
   end
 
   protected

@@ -14,7 +14,8 @@ class ImageServer < Sinatra::Base
   # Crop    - Boolean, set to true when to crop the image, instead of scale (default: false )
   #
   configure do
-    set :allowed_domain,  ''
+    set :default_domain,  '<main domain for / redirection>'
+    set :allowed_domain,  '<image storage domain>'
     set :allowed_actions, [:gravity, :quality, :resize, :rotate, :strip, :crop]
   end
 
@@ -22,20 +23,20 @@ class ImageServer < Sinatra::Base
   # Redirect to codezombie.org
   #
   get "/" do
-    redirect "http://codezombie.org"
+    redirect settings.default_domain
   end
 
   #
   # Example
   # /i/IMG_3821.JPG?resize=300x300&rotate=90&crop=true&quality=80
-  # Throws an ImageProcessor::ImageNotFound, if the image doesn't exist
+  # Throws an ImageProcessor::NoSuchFileException, if the image doesn't exist
   # TODO: Add more exceptions for various possible errors.
   #
   get "/i/:path" do |path|
     begin
       @image = ImageProcessor.new(parsed_url(path), parsed_options).process.store
       send_file(@image.path, :type => @image.type, :disposition => "inline")
-    rescue ImageProcessor::ImageNotFound
+    rescue ImageProcessor::NoSuchFileException
       not_found { "That image could not be located." }
     end
   end

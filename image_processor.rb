@@ -26,12 +26,14 @@ class ImageProcessor
     if @options.any?
       @image.combine_options do |c|
         c.filter  'box'
-        c.gravity gravity     if @options[:gravity]
         c.quality quality     if @options[:quality]
         c.resize  extent      if @options[:resize]
         c.rotate  rotate      if @options[:rotate]
         c.strip               if @options[:strip]
-        c.extent  dimensions  if @options[:crop]
+        if @options[:crop]
+          c.extent  dimensions
+          c.gravity gravity
+        end
       end
     end
     self
